@@ -18,6 +18,10 @@
       size = 10000;
     };
 
+    sessionVariables = {
+      UV_LINK_MODE = "copy";
+    };
+
     envExtra = ''
       # Source nix-daemon for PATH setup (needed on WSL)
       if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
