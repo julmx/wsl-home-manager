@@ -17,7 +17,7 @@
     ./modules/cli/gh.nix
 
     # Editors
-    ./modules/editors/nixvim.nix
+    ./modules/editors/neovim.nix
 
     # Terminal multiplexer
     ./modules/tmux.nix
