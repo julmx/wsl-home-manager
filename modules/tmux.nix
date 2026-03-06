@@ -4,7 +4,7 @@
     enable = true;
     mouse = true;
     shell = "${pkgs.zsh}/bin/zsh";
-    prefix = "C-a";
+    prefix = "C-q";
     terminal = "tmux-256color";
     keyMode = "vi";
     baseIndex = 1;

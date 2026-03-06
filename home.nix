@@ -45,6 +45,11 @@
     unzip
     unrar
     wget
+    jq
+
+    # Development
+    nodejs_22
+    pnpm
 
     # Fun / display
     onefetch
