@@ -50,6 +50,7 @@
     # Development
     nodejs_22
     pnpm
+    pyright
 
     # Fun / display
     onefetch
