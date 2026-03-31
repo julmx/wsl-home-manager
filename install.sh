@@ -109,7 +109,9 @@ nix run home-manager -- switch --flake "$CONFIG_DIR"
 export PATH="$HOME_DIR/.nix-profile/bin:$PATH"
 
 # --- Installation des fonts côté Windows (dossier utilisateur, pas besoin d'admin) ---
-WIN_USER_FONTS=$(find /mnt/c/Users -maxdepth 1 -mindepth 1 -type d ! -name "Public" ! -name "Default*" ! -name "defaultuser*" ! -name "All Users" 2>/dev/null | head -1)
+WIN_USER=$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r\n')
+WIN_USER_FONTS="/mnt/c/Users/$WIN_USER"
+[[ ! -d "$WIN_USER_FONTS" ]] && WIN_USER_FONTS=""
 if [[ -n "$WIN_USER_FONTS" ]]; then
     WIN_USER_FONTS="$WIN_USER_FONTS/AppData/Local/Microsoft/Windows/Fonts"
     mkdir -p "$WIN_USER_FONTS"
@@ -123,7 +125,7 @@ fi
 
 # --- Windows Terminal (thème Catppuccin Macchiato) ---
 if [[ -d "/mnt/c" ]]; then
-    WT_SETTINGS=$(find /mnt/c/Users/*/AppData/Local/Packages/Microsoft.WindowsTerminal*/LocalState/settings.json 2>/dev/null | head -1)
+    WT_SETTINGS=$(find "/mnt/c/Users/$WIN_USER/AppData/Local/Packages/" -path "*/Microsoft.WindowsTerminal*/LocalState/settings.json" 2>/dev/null | head -1)
     if [[ -n "$WT_SETTINGS" ]]; then
         info "Configuration du thème Catppuccin Macchiato dans Windows Terminal..."
         WT_THEME="$CONFIG_DIR/windows-terminal.json"

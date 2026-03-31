@@ -53,9 +53,9 @@ packages:
 fonts:
     #!/usr/bin/env bash
     FONT_DIR="$HOME/.nix-profile/share/fonts/truetype"
-    WIN_USER=$(find /mnt/c/Users -maxdepth 1 -mindepth 1 -type d ! -name "Public" ! -name "Default*" ! -name "defaultuser*" ! -name "All Users" 2>/dev/null | head -1)
-    [[ -z "$WIN_USER" ]] && { echo "Erreur: /mnt/c non disponible"; exit 1; }
-    WIN_FONTS="$WIN_USER/AppData/Local/Microsoft/Windows/Fonts"
+    WIN_USER=$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r\n')
+    [[ -z "$WIN_USER" ]] && { echo "Erreur: impossible de détecter l'utilisateur Windows"; exit 1; }
+    WIN_FONTS="/mnt/c/Users/$WIN_USER/AppData/Local/Microsoft/Windows/Fonts"
     mkdir -p "$WIN_FONTS"
     find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp -n {} "$WIN_FONTS/" \;
     echo "Fonts installées dans $WIN_FONTS"
@@ -64,7 +64,8 @@ fonts:
 theme:
     #!/usr/bin/env bash
     set -euo pipefail
-    WT_SETTINGS=$(find /mnt/c/Users/*/AppData/Local/Packages/Microsoft.WindowsTerminal*/LocalState/settings.json 2>/dev/null | head -1)
+    WIN_USER=$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r\n')
+    WT_SETTINGS=$(find "/mnt/c/Users/$WIN_USER/AppData/Local/Packages/" -path "*/Microsoft.WindowsTerminal*/LocalState/settings.json" 2>/dev/null | head -1)
     [[ -z "$WT_SETTINGS" ]] && { echo "Erreur: Windows Terminal non trouvé"; exit 1; }
     WT_THEME="{{ flake }}/windows-terminal.json"
     SCHEME=$(jq '.scheme' "$WT_THEME")
