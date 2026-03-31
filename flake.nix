@@ -17,7 +17,7 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-      local = import (builtins.toPath "${builtins.getEnv "HOME"}/.config/home-manager/local.nix");
+      local = import ./local.nix;
     in
     {
       homeConfigurations.${local.username} = home-manager.lib.homeManagerConfiguration {

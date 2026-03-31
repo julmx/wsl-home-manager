@@ -47,17 +47,23 @@ experimental-features = nix-command flakes
 git clone https://github.com/julmx/wsl-home-manager.git ~/.config/home-manager
 ```
 
-4. **Créer `local.nix`** à partir du template :
+4. **Configurer `local.nix`** avec vos informations :
 
 ```bash
-cp ~/.config/home-manager/local.nix.example ~/.config/home-manager/local.nix
-nvim ~/.config/home-manager/local.nix  # adapter les valeurs
+nvim ~/.config/home-manager/local.nix  # adapter username, homeDirectory, gitName, gitEmail
 ```
 
-5. **Appliquer la configuration** :
+5. **Empêcher git de tracker vos modifications locales** :
 
 ```bash
-nix run home-manager -- switch --flake ~/.config/home-manager --impure
+just init
+# ou: git update-index --skip-worktree local.nix
+```
+
+6. **Appliquer la configuration** :
+
+```bash
+nix run home-manager -- switch --flake ~/.config/home-manager
 ```
 
 </details>
@@ -70,6 +76,7 @@ Les tâches courantes sont disponibles via [`just`](https://github.com/casey/jus
 
 | Commande | Description |
 |---|---|
+| `just init` | Initialiser après clonage (skip-worktree sur local.nix) |
 | `just switch` | Appliquer la configuration |
 | `just switch-debug` | Appliquer avec trace complète (debug) |
 | `just update` | Mettre à jour les inputs du flake (nixpkgs, home-manager, nixvim) |
@@ -125,8 +132,8 @@ just generations
 ├── flake.nix          # Point d'entrée, définition des inputs (nixpkgs, home-manager, nixvim)
 ├── flake.lock         # Versions verrouillées des inputs
 ├── home.nix           # Configuration principale (paquets, imports des modules)
-├── local.nix          # Config locale spécifique à la machine (gitignored)
-├── local.nix.example  # Template pour local.nix
+├── local.nix          # Config locale spécifique à la machine (tracké mais skip-worktree)
+├── local.nix.example  # Template de référence pour local.nix
 ├── justfile           # Commandes de gestion (just switch, just update, etc.)
 ├── install.sh         # Script d'installation automatique
 └── modules/

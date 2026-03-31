@@ -68,8 +68,8 @@ else
     git clone "$REPO" "$CONFIG_DIR"
 fi
 
-# --- Génération de local.nix ---
-info "Génération de local.nix..."
+# --- Configuration de local.nix ---
+info "Configuration de local.nix..."
 cat > "$CONFIG_DIR/local.nix" <<EOF
 {
   username = "$USERNAME";
@@ -79,8 +79,11 @@ cat > "$CONFIG_DIR/local.nix" <<EOF
 }
 EOF
 
+# Empêcher git de tracker les modifications locales de local.nix
+git -C "$CONFIG_DIR" update-index --skip-worktree local.nix
+
 # --- Application ---
 info "Application de la configuration Home Manager..."
-nix run home-manager -- switch --flake "$CONFIG_DIR" --impure
+nix run home-manager -- switch --flake "$CONFIG_DIR"
 
 info "Installation terminée ! Relancez votre shell ou faites: exec \$SHELL"

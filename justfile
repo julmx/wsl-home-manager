@@ -3,13 +3,17 @@
 # Chemin du flake
 flake := env("HOME") / ".config/home-manager"
 
+# Initialiser après clonage (empêche git de tracker les modifs de local.nix)
+init:
+    git update-index --skip-worktree {{ flake }}/local.nix
+
 # Appliquer la configuration
 switch:
-    home-manager switch --flake {{ flake }} --impure
+    home-manager switch --flake {{ flake }}
 
 # Appliquer avec trace complète (debug)
 switch-debug:
-    home-manager switch --flake {{ flake }} --impure --show-trace
+    home-manager switch --flake {{ flake }} --show-trace
 
 # Mettre à jour les inputs (nixpkgs, home-manager, nixvim)
 update:
@@ -39,7 +43,7 @@ news:
 
 # Vérifier la config sans l'appliquer
 check:
-    nix flake check {{ flake }} --impure
+    nix flake check {{ flake }}
 
 # Afficher les paquets installés
 packages:
