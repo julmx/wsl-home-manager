@@ -88,4 +88,15 @@ git -C "$CONFIG_DIR" update-index --skip-worktree local.nix
 info "Application de la configuration Home Manager..."
 nix run home-manager -- switch --flake "$CONFIG_DIR"
 
+# --- Shell par défaut ---
+ZSH_PATH="$(command -v zsh 2>/dev/null)"
+if [[ -n "$ZSH_PATH" && "$SHELL" != "$ZSH_PATH" ]]; then
+    info "Configuration de zsh comme shell par défaut..."
+    if ! grep -qx "$ZSH_PATH" /etc/shells 2>/dev/null; then
+        echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
+    fi
+    sudo chsh -s "$ZSH_PATH" "$USERNAME"
+    info "Shell par défaut changé pour zsh."
+fi
+
 info "Installation terminée ! Relancez votre shell ou faites: exec \$SHELL"
