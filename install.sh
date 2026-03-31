@@ -88,15 +88,26 @@ git -C "$CONFIG_DIR" update-index --skip-worktree local.nix
 info "Application de la configuration Home Manager..."
 nix run home-manager -- switch --flake "$CONFIG_DIR"
 
+# --- Recharger le PATH après home-manager ---
+export PATH="$HOME_DIR/.nix-profile/bin:$PATH"
+
 # --- Shell par défaut ---
-ZSH_PATH="$(command -v zsh 2>/dev/null)"
-if [[ -n "$ZSH_PATH" && "$SHELL" != "$ZSH_PATH" ]]; then
-    info "Configuration de zsh comme shell par défaut..."
-    if ! grep -qx "$ZSH_PATH" /etc/shells 2>/dev/null; then
-        echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
-    fi
-    sudo chsh -s "$ZSH_PATH" "$USERNAME"
-    info "Shell par défaut changé pour zsh."
+ZSH_PATH="$HOME_DIR/.nix-profile/bin/zsh"
+if [[ ! -x "$ZSH_PATH" ]]; then
+    error "zsh introuvable dans $ZSH_PATH — home-manager switch a peut-être échoué."
 fi
 
-info "Installation terminée ! Relancez votre shell ou faites: exec \$SHELL"
+if ! grep -qx "$ZSH_PATH" /etc/shells 2>/dev/null; then
+    info "Ajout de zsh dans /etc/shells..."
+    echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
+fi
+
+if [[ "$(getent passwd "$USERNAME" | cut -d: -f7)" != "$ZSH_PATH" ]]; then
+    info "Configuration de zsh comme shell par défaut..."
+    sudo chsh -s "$ZSH_PATH" "$USERNAME"
+    info "Shell par défaut changé pour zsh."
+else
+    info "zsh est déjà le shell par défaut."
+fi
+
+info "Installation terminée ! Relancez votre terminal ou faites: exec zsh"
