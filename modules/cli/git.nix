@@ -1,11 +1,11 @@
-{ ... }:
+{ local, ... }:
 {
   programs.git = {
     enable = true;
     settings = {
       user = {
-        name = "julmx";
-        email = "julmx@dev.local";
+        name = local.gitName;
+        email = local.gitEmail;
       };
       push.default = "simple";
       init.defaultBranch = "main";

@@ -5,11 +5,11 @@ flake := env("HOME") / ".config/home-manager"
 
 # Appliquer la configuration
 switch:
-    home-manager switch --flake {{ flake }}
+    home-manager switch --flake {{ flake }} --impure
 
 # Appliquer avec trace complète (debug)
 switch-debug:
-    home-manager switch --flake {{ flake }} --show-trace
+    home-manager switch --flake {{ flake }} --impure --show-trace
 
 # Mettre à jour les inputs (nixpkgs, home-manager, nixvim)
 update:
@@ -39,7 +39,7 @@ news:
 
 # Vérifier la config sans l'appliquer
 check:
-    nix flake check {{ flake }}
+    nix flake check {{ flake }} --impure
 
 # Afficher les paquets installés
 packages:

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, local, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -32,8 +32,8 @@
     ./modules/yazi/default.nix
   ];
 
-  home.username = "julmx";
-  home.homeDirectory = "/home/julmx";
+  home.username = local.username;
+  home.homeDirectory = local.homeDirectory;
   home.stateVersion = "25.05";
 
   home.packages = with pkgs; [

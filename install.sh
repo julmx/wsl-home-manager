@@ -15,14 +15,21 @@ info()  { echo -e "${green}[+]${reset} $1"; }
 warn()  { echo -e "${yellow}[!]${reset} $1"; }
 error() { echo -e "${red}[x]${reset} $1"; exit 1; }
 
-# --- Username ---
-read -rp "Nom d'utilisateur pour Home Manager: " USERNAME
+# --- Informations utilisateur ---
+read -rp "Nom d'utilisateur système: " USERNAME
 [[ -z "$USERNAME" ]] && error "Le nom d'utilisateur ne peut pas être vide."
 
 HOME_DIR="/home/$USERNAME"
 [[ ! -d "$HOME_DIR" ]] && error "Le répertoire $HOME_DIR n'existe pas."
 
-info "Configuration pour l'utilisateur: $USERNAME ($HOME_DIR)"
+read -rp "Nom pour git (ex: Jean Dupont) [$USERNAME]: " GIT_NAME
+GIT_NAME="${GIT_NAME:-$USERNAME}"
+
+read -rp "Email pour git: " GIT_EMAIL
+[[ -z "$GIT_EMAIL" ]] && error "L'email git ne peut pas être vide."
+
+info "Configuration pour: $USERNAME ($HOME_DIR)"
+info "Git: $GIT_NAME <$GIT_EMAIL>"
 
 # --- Nix ---
 if command -v nix &>/dev/null; then
@@ -61,15 +68,19 @@ else
     git clone "$REPO" "$CONFIG_DIR"
 fi
 
-# --- Remplacement du username ---
-info "Adaptation de la configuration pour $USERNAME..."
-
-sed -i "s/homeConfigurations\\.\"julmx\"/homeConfigurations.\"$USERNAME\"/" "$CONFIG_DIR/flake.nix"
-sed -i "s|home.username = \"julmx\"|home.username = \"$USERNAME\"|" "$CONFIG_DIR/home.nix"
-sed -i "s|home.homeDirectory = \"/home/julmx\"|home.homeDirectory = \"$HOME_DIR\"|" "$CONFIG_DIR/home.nix"
+# --- Génération de local.nix ---
+info "Génération de local.nix..."
+cat > "$CONFIG_DIR/local.nix" <<EOF
+{
+  username = "$USERNAME";
+  homeDirectory = "$HOME_DIR";
+  gitName = "$GIT_NAME";
+  gitEmail = "$GIT_EMAIL";
+}
+EOF
 
 # --- Application ---
 info "Application de la configuration Home Manager..."
-nix run home-manager -- switch --flake "$CONFIG_DIR"
+nix run home-manager -- switch --flake "$CONFIG_DIR" --impure
 
 info "Installation terminée ! Relancez votre shell ou faites: exec \$SHELL"

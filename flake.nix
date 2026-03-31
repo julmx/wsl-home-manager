@@ -17,11 +17,12 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      local = import (builtins.toPath "${builtins.getEnv "HOME"}/.config/home-manager/local.nix");
     in
     {
-      homeConfigurations."julmx" = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations.${local.username} = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = { inherit inputs local; };
         modules = [
           ./home.nix
         ];

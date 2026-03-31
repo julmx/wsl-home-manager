@@ -22,7 +22,7 @@ Le script `install.sh` gère tout automatiquement (installation de Nix, activati
 bash <(curl -sL https://raw.githubusercontent.com/julmx/wsl-home-manager/main/install.sh)
 ```
 
-Le script demandera uniquement le nom d'utilisateur.
+Le script demandera le nom d'utilisateur, le nom git et l'email git.
 
 ### Installation manuelle
 
@@ -47,14 +47,17 @@ experimental-features = nix-command flakes
 git clone git@github.com:julmx/wsl-home-manager.git ~/.config/home-manager
 ```
 
-4. **Adapter le nom d'utilisateur** dans `flake.nix` et `home.nix` :
-   - `flake.nix` : remplacer `"julmx"` dans `homeConfigurations."julmx"`
-   - `home.nix` : modifier `home.username` et `home.homeDirectory`
+4. **Créer `local.nix`** à partir du template :
+
+```bash
+cp ~/.config/home-manager/local.nix.example ~/.config/home-manager/local.nix
+nvim ~/.config/home-manager/local.nix  # adapter les valeurs
+```
 
 5. **Appliquer la configuration** :
 
 ```bash
-nix run home-manager -- switch --flake ~/.config/home-manager
+nix run home-manager -- switch --flake ~/.config/home-manager --impure
 ```
 
 </details>
@@ -122,6 +125,8 @@ just generations
 ├── flake.nix          # Point d'entrée, définition des inputs (nixpkgs, home-manager, nixvim)
 ├── flake.lock         # Versions verrouillées des inputs
 ├── home.nix           # Configuration principale (paquets, imports des modules)
+├── local.nix          # Config locale spécifique à la machine (gitignored)
+├── local.nix.example  # Template pour local.nix
 ├── justfile           # Commandes de gestion (just switch, just update, etc.)
 ├── install.sh         # Script d'installation automatique
 └── modules/
