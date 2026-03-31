@@ -44,11 +44,11 @@ else
 fi
 
 # --- Flakes ---
-if nix flake --help &>/dev/null 2>&1; then
+mkdir -p "$(dirname "$NIX_CONF")"
+if grep -q "experimental-features.*flakes" "$NIX_CONF" 2>/dev/null; then
     info "Les flakes sont déjà activés."
 else
     info "Activation des flakes..."
-    mkdir -p "$(dirname "$NIX_CONF")"
     echo "experimental-features = nix-command flakes" >> "$NIX_CONF"
     info "Flakes activés dans $NIX_CONF"
 fi
