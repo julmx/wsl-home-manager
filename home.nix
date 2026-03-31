@@ -46,6 +46,7 @@
     unrar
     wget
     jq
+    just
 
     # Development
     nodejs_22

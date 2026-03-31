@@ -50,15 +50,23 @@ home-manager switch --flake ~/.config/home-manager
 
 La première exécution peut prendre un moment (téléchargement de tous les paquets).
 
-## Commandes de base
+## Commandes
+
+Les tâches courantes sont disponibles via [`just`](https://github.com/casey/just). Lancer `just` sans argument affiche les commandes disponibles.
 
 | Commande | Description |
 |---|---|
-| `home-manager switch --flake ~/.config/home-manager` | Appliquer la configuration (après modification) |
-| `home-manager generations` | Lister les générations (historique des activations) |
-| `home-manager expire-generations "-7 days"` | Supprimer les générations de plus de 7 jours |
-| `nix flake update --flake ~/.config/home-manager` | Mettre à jour les inputs du flake (nixpkgs, home-manager, nixvim) |
-| `home-manager switch --flake ~/.config/home-manager --show-trace` | Appliquer avec trace complète en cas d'erreur |
+| `just switch` | Appliquer la configuration |
+| `just switch-debug` | Appliquer avec trace complète (debug) |
+| `just update` | Mettre à jour les inputs du flake (nixpkgs, home-manager, nixvim) |
+| `just upgrade` | Mettre à jour + appliquer |
+| `just generations` | Lister les générations (historique) |
+| `just packages` | Lister les paquets installés |
+| `just check` | Vérifier la config sans l'appliquer |
+| `just news` | Afficher les news Home Manager |
+| `just clean` | Supprimer les générations de plus de 7 jours |
+| `just gc` | Lancer le ramasse-miettes Nix |
+| `just purge` | Nettoyage complet (clean + gc) |
 
 ## Workflow typique
 
@@ -67,10 +75,9 @@ La première exécution peut prendre un moment (téléchargement de tous les paq
 nvim ~/.config/home-manager/home.nix
 
 # 2. Appliquer les changements
-home-manager switch --flake ~/.config/home-manager
+just switch
 
 # 3. Versionner
-cd ~/.config/home-manager
 git add -A && git commit -m "feat: ajout de ..."
 git push
 ```
@@ -78,14 +85,10 @@ git push
 ## Mettre à jour les paquets
 
 ```bash
-# Mettre à jour le flake.lock (nouvelles versions de nixpkgs, home-manager, nixvim)
-nix flake update --flake ~/.config/home-manager
-
-# Reconstruire avec les mises à jour
-home-manager switch --flake ~/.config/home-manager
+# Mettre à jour et appliquer en une commande
+just upgrade
 
 # Versionner le lock
-cd ~/.config/home-manager
 git add flake.lock && git commit -m "chore: update flake inputs"
 ```
 
@@ -95,7 +98,7 @@ Pour revenir à une génération précédente :
 
 ```bash
 # Lister les générations
-home-manager generations
+just generations
 
 # Activer une génération spécifique (copier le chemin depuis la sortie ci-dessus)
 /nix/store/...-home-manager-generation/activate
@@ -108,6 +111,7 @@ home-manager generations
 ├── flake.nix          # Point d'entrée, définition des inputs (nixpkgs, home-manager, nixvim)
 ├── flake.lock         # Versions verrouillées des inputs
 ├── home.nix           # Configuration principale (paquets, imports des modules)
+├── justfile           # Commandes de gestion (just switch, just update, etc.)
 └── modules/
     ├── cli/           # bat, fzf, git, lazygit, htop, btop, bottom, gh
     ├── editors/       # neovim (nixvim)
