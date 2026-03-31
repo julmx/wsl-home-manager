@@ -48,3 +48,30 @@ check:
 # Afficher les paquets installés
 packages:
     home-manager packages
+
+# Installer les Nerd Fonts côté Windows (pour Windows Terminal)
+fonts:
+    #!/usr/bin/env bash
+    FONT_DIR="$HOME/.nix-profile/share/fonts/truetype"
+    WIN_FONTS="/mnt/c/Windows/Fonts"
+    if [[ ! -d "$WIN_FONTS" ]]; then echo "Erreur: /mnt/c non disponible"; exit 1; fi
+    find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp -n {} "$WIN_FONTS/" \;
+    echo "Fonts installées dans $WIN_FONTS"
+
+# Appliquer le thème Catppuccin Macchiato à Windows Terminal
+theme:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    WT_SETTINGS=$(find /mnt/c/Users/*/AppData/Local/Packages/Microsoft.WindowsTerminal*/LocalState/settings.json 2>/dev/null | head -1)
+    [[ -z "$WT_SETTINGS" ]] && { echo "Erreur: Windows Terminal non trouvé"; exit 1; }
+    WT_THEME="{{ flake }}/windows-terminal.json"
+    SCHEME=$(jq '.scheme' "$WT_THEME")
+    THEME=$(jq '.theme' "$WT_THEME")
+    if ! jq -e '.schemes[] | select(.name == "Catppuccin Macchiato")' "$WT_SETTINGS" &>/dev/null; then
+        jq ".schemes += [$SCHEME]" "$WT_SETTINGS" > "${WT_SETTINGS}.tmp" && mv "${WT_SETTINGS}.tmp" "$WT_SETTINGS"
+    fi
+    if ! jq -e '.themes[] | select(.name == "Catppuccin Macchiato")' "$WT_SETTINGS" &>/dev/null; then
+        jq ".themes += [$THEME]" "$WT_SETTINGS" > "${WT_SETTINGS}.tmp" && mv "${WT_SETTINGS}.tmp" "$WT_SETTINGS"
+    fi
+    jq '.theme = "Catppuccin Macchiato" | .profiles.defaults.colorScheme = "Catppuccin Macchiato"' "$WT_SETTINGS" > "${WT_SETTINGS}.tmp" && mv "${WT_SETTINGS}.tmp" "$WT_SETTINGS"
+    echo "Thème Catppuccin Macchiato appliqué à Windows Terminal."
