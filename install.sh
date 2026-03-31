@@ -108,13 +108,15 @@ nix run home-manager -- switch --flake "$CONFIG_DIR"
 # --- Recharger le PATH après home-manager ---
 export PATH="$HOME_DIR/.nix-profile/bin:$PATH"
 
-# --- Installation des fonts côté Windows ---
-WIN_FONTS="/mnt/c/Windows/Fonts"
-if [[ -d "$WIN_FONTS" ]]; then
+# --- Installation des fonts côté Windows (dossier utilisateur, pas besoin d'admin) ---
+WIN_USER_FONTS=$(find /mnt/c/Users -maxdepth 1 -mindepth 1 -type d ! -name "Public" ! -name "Default*" 2>/dev/null | head -1)
+if [[ -n "$WIN_USER_FONTS" ]]; then
+    WIN_USER_FONTS="$WIN_USER_FONTS/AppData/Local/Microsoft/Windows/Fonts"
+    mkdir -p "$WIN_USER_FONTS"
     info "Installation des Nerd Fonts côté Windows..."
     FONT_DIR="$HOME_DIR/.nix-profile/share/fonts/truetype"
-    find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp -n {} "$WIN_FONTS/" \;
-    info "Fonts installées dans $WIN_FONTS"
+    find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp -n {} "$WIN_USER_FONTS/" \;
+    info "Fonts installées dans $WIN_USER_FONTS"
 else
     warn "/mnt/c non disponible — installation des fonts Windows ignorée."
 fi

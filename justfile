@@ -49,12 +49,14 @@ check:
 packages:
     home-manager packages
 
-# Installer les Nerd Fonts côté Windows (pour Windows Terminal)
+# Installer les Nerd Fonts côté Windows (dossier utilisateur, pas besoin d'admin)
 fonts:
     #!/usr/bin/env bash
     FONT_DIR="$HOME/.nix-profile/share/fonts/truetype"
-    WIN_FONTS="/mnt/c/Windows/Fonts"
-    if [[ ! -d "$WIN_FONTS" ]]; then echo "Erreur: /mnt/c non disponible"; exit 1; fi
+    WIN_USER=$(find /mnt/c/Users -maxdepth 1 -mindepth 1 -type d ! -name "Public" ! -name "Default*" 2>/dev/null | head -1)
+    [[ -z "$WIN_USER" ]] && { echo "Erreur: /mnt/c non disponible"; exit 1; }
+    WIN_FONTS="$WIN_USER/AppData/Local/Microsoft/Windows/Fonts"
+    mkdir -p "$WIN_FONTS"
     find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp -n {} "$WIN_FONTS/" \;
     echo "Fonts installées dans $WIN_FONTS"
 
