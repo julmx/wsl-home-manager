@@ -57,7 +57,7 @@ fonts:
     [[ -z "$WIN_USER" ]] && { echo "Erreur: impossible de détecter l'utilisateur Windows"; exit 1; }
     WIN_FONTS="/mnt/c/Users/$WIN_USER/AppData/Local/Microsoft/Windows/Fonts"
     mkdir -p "$WIN_FONTS"
-    find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp -n {} "$WIN_FONTS/" \;
+    find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp --update=none {} "$WIN_FONTS/" \;
     echo "Fonts installées dans $WIN_FONTS"
 
 # Appliquer le thème Catppuccin Macchiato à Windows Terminal

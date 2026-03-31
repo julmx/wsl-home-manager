@@ -117,7 +117,7 @@ if [[ -n "$WIN_USER_FONTS" ]]; then
     mkdir -p "$WIN_USER_FONTS"
     info "Installation des Nerd Fonts côté Windows..."
     FONT_DIR="$HOME_DIR/.nix-profile/share/fonts/truetype"
-    find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp -n {} "$WIN_USER_FONTS/" \;
+    find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp --update=none {} "$WIN_USER_FONTS/" \;
     info "Fonts installées dans $WIN_USER_FONTS"
 else
     warn "/mnt/c non disponible — installation des fonts Windows ignorée."
