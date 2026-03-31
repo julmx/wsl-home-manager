@@ -59,11 +59,13 @@ if ! command -v git &>/dev/null; then
     nix profile install nixpkgs#git
 fi
 
-# --- Clone ---
-if [[ -d "$CONFIG_DIR" ]]; then
-    warn "$CONFIG_DIR existe déjà, étape de clonage ignorée."
+# --- Clone ou mise à jour ---
+if [[ -d "$CONFIG_DIR/.git" ]]; then
+    info "Mise à jour du dépôt existant..."
+    git -C "$CONFIG_DIR" pull --rebase
 else
     info "Clonage du dépôt..."
+    rm -rf "$CONFIG_DIR"
     mkdir -p "$(dirname "$CONFIG_DIR")"
     git clone "$REPO" "$CONFIG_DIR"
 fi
