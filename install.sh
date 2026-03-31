@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="git@github.com:julmx/wsl-home-manager.git"
+REPO="https://github.com/julmx/wsl-home-manager.git"
 CONFIG_DIR="$HOME/.config/home-manager"
 NIX_CONF="$HOME/.config/nix/nix.conf"
 

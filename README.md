@@ -44,7 +44,7 @@ experimental-features = nix-command flakes
 3. **Cloner le dépôt** :
 
 ```bash
-git clone git@github.com:julmx/wsl-home-manager.git ~/.config/home-manager
+git clone https://github.com/julmx/wsl-home-manager.git ~/.config/home-manager
 ```
 
 4. **Créer `local.nix`** à partir du template :
