@@ -118,7 +118,18 @@ if [[ -n "$WIN_USER_FONTS" ]]; then
     info "Installation des Nerd Fonts côté Windows..."
     FONT_DIR="$HOME_DIR/.nix-profile/share/fonts/truetype"
     find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp --update=none {} "$WIN_USER_FONTS/" \;
-    info "Fonts installées dans $WIN_USER_FONTS"
+    # Enregistrer les fonts dans le registre Windows (nécessaire pour qu'elles apparaissent)
+    WIN_FONTS_WIN="C:\\Users\\$WIN_USER\\AppData\\Local\\Microsoft\\Windows\\Fonts"
+    powershell.exe -NoProfile -Command "
+        Get-ChildItem '$WIN_FONTS_WIN' -Filter '*.ttf' | ForEach-Object {
+            \$regPath = 'HKCU:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts'
+            \$name = \$_.BaseName + ' (TrueType)'
+            if (-not (Get-ItemProperty -Path \$regPath -Name \$name -ErrorAction SilentlyContinue)) {
+                New-ItemProperty -Path \$regPath -Name \$name -Value \$_.FullName -PropertyType String -Force | Out-Null
+            }
+        }
+    " 2>/dev/null
+    info "Fonts installées et enregistrées dans Windows."
 else
     warn "/mnt/c non disponible — installation des fonts Windows ignorée."
 fi

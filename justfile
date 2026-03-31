@@ -58,7 +58,17 @@ fonts:
     WIN_FONTS="/mnt/c/Users/$WIN_USER/AppData/Local/Microsoft/Windows/Fonts"
     mkdir -p "$WIN_FONTS"
     find -L "$FONT_DIR" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp --update=none {} "$WIN_FONTS/" \;
-    echo "Fonts installées dans $WIN_FONTS"
+    WIN_FONTS_WIN="C:\\Users\\$WIN_USER\\AppData\\Local\\Microsoft\\Windows\\Fonts"
+    powershell.exe -NoProfile -Command "
+        Get-ChildItem '$WIN_FONTS_WIN' -Filter '*.ttf' | ForEach-Object {
+            \$regPath = 'HKCU:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts'
+            \$name = \$_.BaseName + ' (TrueType)'
+            if (-not (Get-ItemProperty -Path \$regPath -Name \$name -ErrorAction SilentlyContinue)) {
+                New-ItemProperty -Path \$regPath -Name \$name -Value \$_.FullName -PropertyType String -Force | Out-Null
+            }
+        }
+    " 2>/dev/null
+    echo "Fonts installées et enregistrées dans Windows."
 
 # Appliquer le thème Catppuccin Macchiato à Windows Terminal
 theme:
