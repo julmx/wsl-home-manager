@@ -53,7 +53,7 @@ packages:
 fonts:
     #!/usr/bin/env bash
     FONT_DIR="$HOME/.nix-profile/share/fonts/truetype"
-    WIN_USER=$(find /mnt/c/Users -maxdepth 1 -mindepth 1 -type d ! -name "Public" ! -name "Default*" 2>/dev/null | head -1)
+    WIN_USER=$(find /mnt/c/Users -maxdepth 1 -mindepth 1 -type d ! -name "Public" ! -name "Default*" ! -name "defaultuser*" ! -name "All Users" 2>/dev/null | head -1)
     [[ -z "$WIN_USER" ]] && { echo "Erreur: /mnt/c non disponible"; exit 1; }
     WIN_FONTS="$WIN_USER/AppData/Local/Microsoft/Windows/Fonts"
     mkdir -p "$WIN_FONTS"

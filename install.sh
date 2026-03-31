@@ -109,7 +109,7 @@ nix run home-manager -- switch --flake "$CONFIG_DIR"
 export PATH="$HOME_DIR/.nix-profile/bin:$PATH"
 
 # --- Installation des fonts côté Windows (dossier utilisateur, pas besoin d'admin) ---
-WIN_USER_FONTS=$(find /mnt/c/Users -maxdepth 1 -mindepth 1 -type d ! -name "Public" ! -name "Default*" 2>/dev/null | head -1)
+WIN_USER_FONTS=$(find /mnt/c/Users -maxdepth 1 -mindepth 1 -type d ! -name "Public" ! -name "Default*" ! -name "defaultuser*" ! -name "All Users" 2>/dev/null | head -1)
 if [[ -n "$WIN_USER_FONTS" ]]; then
     WIN_USER_FONTS="$WIN_USER_FONTS/AppData/Local/Microsoft/Windows/Fonts"
     mkdir -p "$WIN_USER_FONTS"
