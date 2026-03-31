@@ -14,7 +14,20 @@ Configuration Home Manager (Nix) pour environnement WSL, gérée via un flake.
 
 ## Installation sur une nouvelle machine
 
-### Prérequis
+### Installation automatique
+
+Le script `install.sh` gère tout automatiquement (installation de Nix, activation des flakes, clonage, configuration du username, application) :
+
+```bash
+bash <(curl -sL https://raw.githubusercontent.com/julmx/wsl-home-manager/main/install.sh)
+```
+
+Le script demandera uniquement le nom d'utilisateur.
+
+### Installation manuelle
+
+<details>
+<summary>Étapes détaillées</summary>
 
 1. **Installer Nix** (multi-user) :
 
@@ -22,31 +35,29 @@ Configuration Home Manager (Nix) pour environnement WSL, gérée via un flake.
 sh <(curl -L https://nixos.org/nix/install) --daemon
 ```
 
-2. **Activer les flakes** en ajoutant dans `~/.config/nix/nix.conf` :
+2. **Activer les flakes** dans `~/.config/nix/nix.conf` :
 
 ```
 experimental-features = nix-command flakes
 ```
 
-Puis relancer le shell ou `source` le profil.
-
-### Déployer la configuration
-
-1. **Cloner le dépôt** :
+3. **Cloner le dépôt** :
 
 ```bash
 git clone git@github.com:julmx/wsl-home-manager.git ~/.config/home-manager
 ```
 
-2. **Adapter le nom d'utilisateur** si nécessaire dans `flake.nix` et `home.nix` :
-   - `flake.nix` : remplacer `"julmx"` dans `homeConfigurations."julmx"` par votre username
+4. **Adapter le nom d'utilisateur** dans `flake.nix` et `home.nix` :
+   - `flake.nix` : remplacer `"julmx"` dans `homeConfigurations."julmx"`
    - `home.nix` : modifier `home.username` et `home.homeDirectory`
 
-3. **Appliquer la configuration** :
+5. **Appliquer la configuration** :
 
 ```bash
-home-manager switch --flake ~/.config/home-manager
+nix run home-manager -- switch --flake ~/.config/home-manager
 ```
+
+</details>
 
 La première exécution peut prendre un moment (téléchargement de tous les paquets).
 
@@ -112,6 +123,7 @@ just generations
 ├── flake.lock         # Versions verrouillées des inputs
 ├── home.nix           # Configuration principale (paquets, imports des modules)
 ├── justfile           # Commandes de gestion (just switch, just update, etc.)
+├── install.sh         # Script d'installation automatique
 └── modules/
     ├── cli/           # bat, fzf, git, lazygit, htop, btop, bottom, gh
     ├── editors/       # neovim (nixvim)
