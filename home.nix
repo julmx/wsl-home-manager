@@ -53,6 +53,17 @@
     pnpm
     pyright
 
+    # Go
+    go
+    gopls
+    delve # dlv debugger
+    golangci-lint
+    gofumpt # stricter gofmt
+    gotools # goimports
+    gomodifytags
+    gotests
+    impl
+
     # Fun / display
     onefetch
     cowsay

@@ -35,6 +35,14 @@
       # Runtimes
       python3
       nodejs
+
+      # Go
+      go
+      gopls
+      delve
+      gofumpt
+      gotools # goimports
+      golangci-lint
     ];
 
     extraPlugins = [pkgs.vimPlugins.lazy-nvim];
@@ -109,6 +117,8 @@
           { "mason-org/mason.nvim", enabled = false },
           -- python support
           { import = "lazyvim.plugins.extras.lang.python" },
+          -- go support
+          { import = "lazyvim.plugins.extras.lang.go" },
           -- put this line at the end of spec to clear ensure_installed
           { "nvim-treesitter/nvim-treesitter", opts = function(_, opts) opts.ensure_installed = {} end },
         },
