@@ -52,6 +52,7 @@
     nodejs_22
     pnpm
     pyright
+    sqlite # sqlite3 CLI
 
     # Go
     go
