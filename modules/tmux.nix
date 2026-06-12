@@ -10,6 +10,24 @@
     baseIndex = 1;
     clock24 = false;
 
+    # Persistance des sessions : survivent au reboot / kill-server.
+    # resurrect doit être chargé avant continuum (continuum en dépend).
+    plugins = with pkgs.tmuxPlugins; [
+      {
+        plugin = resurrect;
+        extraConfig = ''
+          set -g @resurrect-capture-pane-contents 'on'
+        '';
+      }
+      {
+        plugin = continuum;
+        extraConfig = ''
+          set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '15'
+        '';
+      }
+    ];
+
     extraConfig = ''
               set-option -g status-position top
               set -ga terminal-overrides ",*:RGB"
