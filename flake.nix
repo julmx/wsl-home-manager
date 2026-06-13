@@ -11,6 +11,11 @@
       url = "github:nix-community/nixvim/nixos-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # herdr (multiplexeur d'agents) — packagé par numtide.
+    # Pas de `inputs.nixpkgs.follows` ici volontairement : sinon herdr est
+    # recompilé depuis les sources (Rust + Zig). Sans follows, on garde le
+    # nixpkgs épinglé par numtide et on bénéficie du cache cache.numtide.com.
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs = { nixpkgs, home-manager, nixvim, ... }@inputs:

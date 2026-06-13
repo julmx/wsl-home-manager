@@ -15,6 +15,7 @@
     ./modules/cli/btop.nix
     ./modules/cli/bottom.nix
     ./modules/cli/gh.nix
+    ./modules/cli/herdr.nix
 
     # Editors
     ./modules/editors/neovim.nix
@@ -90,6 +91,14 @@
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
+
+  # Cache binaire herdr : volontairement NON configuré ici.
+  # Le daemon nix de ce système est multi-user avec `trusted-users = root` seul,
+  # donc un substituter en config utilisateur (ce que gère home-manager) est
+  # ignoré. Pour récupérer herdr pré-compilé au lieu de le builder (Rust + Zig),
+  # ajouter au /etc/nix/nix.conf SYSTÈME (root) puis redémarrer le daemon :
+  #   extra-substituters = https://cache.numtide.com
+  #   extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=
 
   programs.home-manager.enable = true;
 }
