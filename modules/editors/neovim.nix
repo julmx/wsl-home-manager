@@ -23,7 +23,7 @@
       lua-language-server
       pyright
       ruff
-      nodePackages.typescript-language-server
+      typescript-language-server
       vscode-langservers-extracted # HTML/CSS/JSON
       clang-tools
 
