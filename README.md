@@ -6,10 +6,12 @@ Configuration Home Manager (Nix) pour environnement WSL, gérée via un flake.
 
 - **Shell** : Zsh
 - **Editeur** : Neovim (NixVim)
-- **Terminal multiplexer** : Tmux
+- **Terminal multiplexer** : Tmux (persistance des sessions via resurrect + continuum)
+- **Multiplexeur d'agents** : herdr (« tmux » orienté agents IA, via numtide/llm-agents.nix)
 - **CLI tools** : bat, fzf, git, lazygit, htop, btop, bottom, gh
-- **Utilitaires** : eza, zoxide, tealdeer, fastfetch, ripgrep, fd, jq, ncdu, duf, yazi
-- **Dev** : Node.js 22, pnpm, pyright
+- **Utilitaires** : eza, zoxide, tealdeer, fastfetch, ripgrep, fd, jq, ncdu, duf, yazi, unzip, unrar, wget
+- **Dev** : Node.js 22, pnpm, pyright, sqlite, Go (gopls, delve, golangci-lint, gofumpt, goimports, gomodifytags, gotests, impl)
+- **Fun** : onefetch, cowsay, lolcat, mdcat
 - **Fonts** : JetBrains Mono NF, Fira Code NF, Maple Mono NF
 
 ## Installation sur une nouvelle machine
@@ -79,7 +81,7 @@ Les tâches courantes sont disponibles via [`just`](https://github.com/casey/jus
 | `just init` | Initialiser après clonage (skip-worktree sur local.nix) |
 | `just switch` | Appliquer la configuration |
 | `just switch-debug` | Appliquer avec trace complète (debug) |
-| `just update` | Mettre à jour les inputs du flake (nixpkgs, home-manager, nixvim) |
+| `just update` | Mettre à jour les inputs du flake (nixpkgs, home-manager, nixvim, llm-agents) |
 | `just upgrade` | Mettre à jour + appliquer |
 | `just generations` | Lister les générations (historique) |
 | `just packages` | Lister les paquets installés |
@@ -88,6 +90,8 @@ Les tâches courantes sont disponibles via [`just`](https://github.com/casey/jus
 | `just clean` | Supprimer les générations de plus de 7 jours |
 | `just gc` | Lancer le ramasse-miettes Nix |
 | `just purge` | Nettoyage complet (clean + gc) |
+| `just fonts` | Installer les Nerd Fonts côté Windows (dossier utilisateur, sans admin) |
+| `just theme` | Appliquer le thème Catppuccin Macchiato à Windows Terminal |
 
 ## Workflow typique
 
