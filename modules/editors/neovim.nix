@@ -12,6 +12,11 @@
     vimAlias = true;
     defaultEditor = true;
 
+    # On garde `inputs.nixvim.inputs.nixpkgs.follows = "nixpkgs"` (un seul
+    # nixpkgs partagé → réutilisation max du store). Définir explicitement
+    # la source supprime l'avertissement « default value affected by follows ».
+    nixpkgs.source = inputs.nixpkgs;
+
     extraPackages = with pkgs; [
       # Runtime tools
       ripgrep
