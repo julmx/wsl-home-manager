@@ -133,15 +133,16 @@ just generations
 
 ```
 ~/.config/home-manager/
-├── flake.nix          # Point d'entrée, définition des inputs (nixpkgs, home-manager, nixvim)
-├── flake.lock         # Versions verrouillées des inputs
-├── home.nix           # Configuration principale (paquets, imports des modules)
-├── local.nix          # Config locale spécifique à la machine (tracké mais skip-worktree)
-├── local.nix.example  # Template de référence pour local.nix
-├── justfile           # Commandes de gestion (just switch, just update, etc.)
-├── install.sh         # Script d'installation automatique
+├── flake.nix             # Point d'entrée, inputs (nixpkgs, home-manager, nixvim, llm-agents)
+├── flake.lock            # Versions verrouillées des inputs
+├── home.nix              # Configuration principale (paquets, imports des modules)
+├── local.nix             # Config locale spécifique à la machine (tracké mais skip-worktree)
+├── local.nix.example     # Template de référence pour local.nix
+├── justfile              # Commandes de gestion (just switch, just update, etc.)
+├── install.sh            # Script d'installation automatique
+├── windows-terminal.json # Schéma + thème Catppuccin Macchiato (utilisé par just theme)
 └── modules/
-    ├── cli/           # bat, fzf, git, lazygit, htop, btop, bottom, gh
+    ├── cli/           # bat, fzf, git, lazygit, htop, btop, bottom, gh, herdr
     ├── editors/       # neovim (nixvim)
     ├── shell/         # zsh
     ├── yazi/          # gestionnaire de fichiers
