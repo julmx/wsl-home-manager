@@ -41,12 +41,14 @@
     # Search and file tools
     ripgrep
     fd
+    ast-grep # structural code search
     ncdu
     duf
     unzip
     unrar
     wget
     jq
+    yq-go # YAML processor (mikefarah)
     just
 
     # Development
