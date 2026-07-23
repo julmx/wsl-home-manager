@@ -7,7 +7,7 @@ Configuration Home Manager (Nix) pour environnement WSL, gérée via un flake.
 - **Shell** : Zsh
 - **Editeur** : Neovim (NixVim)
 - **Terminal multiplexer** : Tmux (persistance des sessions via resurrect + continuum)
-- **Multiplexeur d'agents** : herdr (« tmux » orienté agents IA, via numtide/llm-agents.nix)
+- **Multiplexeur d'agents** : herdr (« tmux » orienté agents IA, via nixpkgs-unstable)
 - **CLI tools** : bat, fzf, git, lazygit, htop, btop, bottom, gh
 - **Utilitaires** : eza, zoxide, tealdeer, fastfetch, ripgrep, fd, jq, ncdu, duf, yazi, unzip, unrar, wget
 - **Dev** : Node.js 22, pnpm, pyright, sqlite, Go (gopls, delve, golangci-lint, gofumpt, goimports, gomodifytags, gotests, impl)
@@ -81,7 +81,7 @@ Les tâches courantes sont disponibles via [`just`](https://github.com/casey/jus
 | `just init` | Initialiser après clonage (skip-worktree sur local.nix) |
 | `just switch` | Appliquer la configuration |
 | `just switch-debug` | Appliquer avec trace complète (debug) |
-| `just update` | Mettre à jour les inputs du flake (nixpkgs, home-manager, nixvim, llm-agents) |
+| `just update` | Mettre à jour les inputs du flake (nixpkgs, home-manager, nixvim, nixpkgs-unstable) |
 | `just upgrade` | Mettre à jour + appliquer |
 | `just generations` | Lister les générations (historique) |
 | `just packages` | Lister les paquets installés |
@@ -133,7 +133,7 @@ just generations
 
 ```
 ~/.config/home-manager/
-├── flake.nix             # Point d'entrée, inputs (nixpkgs, home-manager, nixvim, llm-agents)
+├── flake.nix             # Point d'entrée, inputs (nixpkgs, home-manager, nixvim, nixpkgs-unstable)
 ├── flake.lock            # Versions verrouillées des inputs
 ├── home.nix              # Configuration principale (paquets, imports des modules)
 ├── local.nix             # Config locale spécifique à la machine (tracké mais skip-worktree)

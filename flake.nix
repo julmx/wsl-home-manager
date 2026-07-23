@@ -11,11 +11,12 @@
       url = "github:nix-community/nixvim/nixos-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # herdr (multiplexeur d'agents) — packagé par numtide.
-    # Pas de `inputs.nixpkgs.follows` ici volontairement : sinon herdr est
-    # recompilé depuis les sources (Rust + Zig). Sans follows, on garde le
-    # nixpkgs épinglé par numtide et on bénéficie du cache cache.numtide.com.
-    llm-agents.url = "github:numtide/llm-agents.nix";
+    # herdr (multiplexeur d'agents) — désormais packagé dans nixpkgs
+    # (pkgs/by-name/he/herdr), mais pas encore dans la branche stable 26.05.
+    # Pin indépendant sur nixos-unstable pour récupérer le binaire pré-compilé
+    # via cache.nixos.org (sinon recompilation Rust + Zig depuis les sources).
+    # Pas de `inputs.nixpkgs.follows` : on garde un pin unstable séparé.
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
   outputs = { nixpkgs, home-manager, nixvim, ... }@inputs:
