@@ -55,6 +55,7 @@
     nodejs_22
     pnpm
     pyright
+    uv # python package/project manager
     sqlite # sqlite3 CLI
 
     # Go
