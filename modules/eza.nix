@@ -10,7 +10,7 @@
       "--group-directories-first"
       "--no-quotes"
       "--header"
-      "--git-ignore"
+      # "--git-ignore"
       "--icons=always"
       "--classify"
       "--hyperlink"
