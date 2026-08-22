@@ -16,6 +16,7 @@
     ./modules/cli/bottom.nix
     ./modules/cli/gh.nix
     ./modules/cli/herdr.nix
+    ./modules/cli/pi-coding-agent.nix
 
     # Editors
     ./modules/editors/neovim.nix
