@@ -3,10 +3,6 @@
 # Chemin du flake
 flake := env("HOME") / ".config/home-manager"
 
-# Initialiser après clonage (empêche git de tracker les modifs de local.nix)
-init:
-    git update-index --skip-worktree {{ flake }}/local.nix
-
 # Appliquer la configuration
 switch:
     home-manager switch --flake {{ flake }}
@@ -32,7 +28,7 @@ clean:
 
 # Lancer le ramasse-miettes Nix
 gc:
-    nix-collect-garbage -d
+    nix-collect-garbage --delete-older-than 7d
 
 # Nettoyage complet (générations + gc)
 purge: clean gc
@@ -44,6 +40,10 @@ news:
 # Vérifier la config sans l'appliquer
 check:
     nix flake check {{ flake }}
+
+# Formater les fichiers Nix avec Alejandra
+fmt:
+    cd {{ flake }} && nix fmt -- .
 
 # Afficher les paquets installés
 packages:

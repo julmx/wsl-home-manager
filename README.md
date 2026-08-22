@@ -8,9 +8,9 @@ Configuration Home Manager (Nix) pour environnement WSL, gérée via un flake.
 - **Editeur** : Neovim (NixVim)
 - **Terminal multiplexer** : Tmux (persistance des sessions via resurrect + continuum)
 - **Multiplexeur d'agents** : herdr (« tmux » orienté agents IA, via nixpkgs-unstable)
-- **CLI tools** : bat, fzf, git, lazygit, htop, btop, bottom, gh
+- **CLI tools** : bat, fzf, git, lazygit, btop, gh
 - **Utilitaires** : eza, zoxide, tealdeer, fastfetch, ripgrep, fd, jq, ncdu, duf, yazi, unzip, unrar, wget
-- **Dev** : Node.js 22, pnpm, pyright, sqlite, Go (gopls, delve, golangci-lint, gofumpt, goimports, gomodifytags, gotests, impl)
+- **Dev** : Node.js (version par défaut de Nixpkgs), pnpm, pyright, sqlite, Go (gopls, delve, golangci-lint, gofumpt, goimports, gomodifytags, gotests, impl)
 - **Fun** : onefetch, cowsay, lolcat, mdcat
 - **Fonts** : JetBrains Mono NF, Fira Code NF, Maple Mono NF
 
@@ -49,20 +49,13 @@ experimental-features = nix-command flakes
 git clone https://github.com/julmx/wsl-home-manager.git ~/.config/home-manager
 ```
 
-4. **Configurer `local.nix`** avec vos informations :
+4. **Configurer l'hôte `desktop-wsl`** avec vos informations :
 
 ```bash
-nvim ~/.config/home-manager/local.nix  # adapter username, homeDirectory, gitName, gitEmail
+nvim ~/.config/home-manager/hosts/desktop-wsl.nix  # adapter username, homeDirectory, gitName, gitEmail
 ```
 
-5. **Empêcher git de tracker vos modifications locales** :
-
-```bash
-just init
-# ou: git update-index --skip-worktree local.nix
-```
-
-6. **Appliquer la configuration** :
+5. **Appliquer la configuration** :
 
 ```bash
 nix run home-manager -- switch --flake ~/.config/home-manager
@@ -78,7 +71,6 @@ Les tâches courantes sont disponibles via [`just`](https://github.com/casey/jus
 
 | Commande | Description |
 |---|---|
-| `just init` | Initialiser après clonage (skip-worktree sur local.nix) |
 | `just switch` | Appliquer la configuration |
 | `just switch-debug` | Appliquer avec trace complète (debug) |
 | `just update` | Mettre à jour les inputs du flake (nixpkgs, home-manager, nixvim, nixpkgs-unstable) |
@@ -136,13 +128,13 @@ just generations
 ├── flake.nix             # Point d'entrée, inputs (nixpkgs, home-manager, nixvim, nixpkgs-unstable)
 ├── flake.lock            # Versions verrouillées des inputs
 ├── home.nix              # Configuration principale (paquets, imports des modules)
-├── local.nix             # Config locale spécifique à la machine (tracké mais skip-worktree)
-├── local.nix.example     # Template de référence pour local.nix
+├── hosts/
+│   └── desktop-wsl.nix   # Configuration spécifique à cet hôte
 ├── justfile              # Commandes de gestion (just switch, just update, etc.)
 ├── install.sh            # Script d'installation automatique
 ├── windows-terminal.json # Schéma + thème Catppuccin Macchiato (utilisé par just theme)
 └── modules/
-    ├── cli/           # bat, fzf, git, lazygit, htop, btop, bottom, gh, herdr
+    ├── cli/           # bat, fzf, git, lazygit, btop, gh, herdr
     ├── editors/       # neovim (nixvim)
     ├── shell/         # zsh
     ├── yazi/          # gestionnaire de fichiers

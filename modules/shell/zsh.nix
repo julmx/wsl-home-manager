@@ -14,6 +14,20 @@
 
     history = {
       ignoreDups = true;
+      ignoreSpace = true;
+      ignorePatterns = [
+        "*password*"
+        "*passwd*"
+        "*secret*"
+        "*token*"
+        "*api[_-]key*"
+        "*apikey*"
+        "*access[_-]key*"
+        "*private[_-]key*"
+        "*authorization*"
+        "*bearer*"
+        "*BEGIN OPENSSH PRIVATE KEY*"
+      ];
       save = 10000;
       size = 10000;
     };

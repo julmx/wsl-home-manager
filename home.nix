@@ -1,6 +1,8 @@
-{ pkgs, local, ... }:
-
 {
+  pkgs,
+  host,
+  ...
+}: {
   nixpkgs.config.allowUnfree = true;
   imports = [
     # Shell
@@ -11,9 +13,7 @@
     ./modules/cli/fzf.nix
     ./modules/cli/git.nix
     ./modules/cli/lazygit.nix
-    ./modules/cli/htop.nix
     ./modules/cli/btop.nix
-    ./modules/cli/bottom.nix
     ./modules/cli/gh.nix
     ./modules/cli/herdr.nix
     ./modules/cli/pi-coding-agent.nix
@@ -34,8 +34,8 @@
     ./modules/yazi/default.nix
   ];
 
-  home.username = local.username;
-  home.homeDirectory = local.homeDirectory;
+  home.username = host.username;
+  home.homeDirectory = host.homeDirectory;
   home.stateVersion = "25.05";
 
   home.packages = with pkgs; [
@@ -53,7 +53,7 @@
     just
 
     # Development
-    nodejs_22
+    nodejs
     pnpm
     pyright
     uv # python package/project manager
@@ -84,6 +84,8 @@
 
   home.sessionPath = [
     "$HOME/.local/bin"
+    "$HOME/go/bin"
+    "$HOME/.local/share/pnpm"
   ];
 
   home.sessionVariables = {

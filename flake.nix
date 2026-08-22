@@ -19,19 +19,22 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
-  outputs = { nixpkgs, home-manager, nixvim, ... }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-      local = import ./local.nix;
-    in
-    {
-      homeConfigurations.${local.username} = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = { inherit inputs local; };
-        modules = [
-          ./home.nix
-        ];
-      };
+  outputs = {
+    nixpkgs,
+    home-manager,
+    ...
+  } @ inputs: let
+    host = import ./hosts/desktop-wsl.nix;
+    pkgs = nixpkgs.legacyPackages.${host.system};
+  in {
+    formatter.${host.system} = pkgs.alejandra;
+
+    homeConfigurations.${host.username} = home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      extraSpecialArgs = {inherit inputs host;};
+      modules = [
+        ./home.nix
+      ];
     };
+  };
 }

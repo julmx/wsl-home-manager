@@ -1,6 +1,0 @@
-{
-  username = "your-username";
-  homeDirectory = "/home/your-username";
-  gitName = "Your Name";
-  gitEmail = "your-email@example.com";
-}

@@ -1,15 +1,13 @@
-{ local, ... }:
-{
+{host, ...}: {
   programs.git = {
     enable = true;
     settings = {
       user = {
-        name = local.gitName;
-        email = local.gitEmail;
+        name = host.gitName;
+        email = host.gitEmail;
       };
       push.default = "simple";
       init.defaultBranch = "main";
-      credential.helper = "cache --timeout=7200";
       merge.conflictStyle = "diff3";
       alias = {
         br = "branch";

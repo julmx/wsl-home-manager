@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   programs.tmux = {
     enable = true;
     mouse = true;
@@ -84,7 +83,7 @@
               bind-key "-" split-window -v -c "#{pane_current_path}"
               bind-key "_" split-window -fv -c "#{pane_current_path}"
 
-              bind -r C-j resize-pane -D 15
+              bind -r C-Down resize-pane -D 15
               bind -r C-k resize-pane -U 15
               bind -r C-h resize-pane -L 15
               bind -r C-l resize-pane -R 15

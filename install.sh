@@ -3,6 +3,7 @@ set -euo pipefail
 
 REPO="https://github.com/julmx/wsl-home-manager.git"
 CONFIG_DIR="$HOME/.config/home-manager"
+HOST_CONFIG="$CONFIG_DIR/hosts/desktop-wsl.nix"
 NIX_CONF="$HOME/.config/nix/nix.conf"
 
 # --- Couleurs ---
@@ -15,13 +16,13 @@ info()  { echo -e "${green}[+]${reset} $1"; }
 warn()  { echo -e "${yellow}[!]${reset} $1"; }
 error() { echo -e "${red}[x]${reset} $1"; exit 1; }
 
-# --- Lecture des valeurs précédentes (si local.nix existe) ---
+# --- Lecture des valeurs précédentes pour cet hôte ---
 PREV_USERNAME="" PREV_HOME="" PREV_GIT_NAME="" PREV_GIT_EMAIL=""
-if [[ -f "$CONFIG_DIR/local.nix" ]]; then
-    PREV_USERNAME=$(grep 'username' "$CONFIG_DIR/local.nix" | sed 's/.*"\(.*\)".*/\1/')
-    PREV_HOME=$(grep 'homeDirectory' "$CONFIG_DIR/local.nix" | sed 's/.*"\(.*\)".*/\1/')
-    PREV_GIT_NAME=$(grep 'gitName' "$CONFIG_DIR/local.nix" | sed 's/.*"\(.*\)".*/\1/')
-    PREV_GIT_EMAIL=$(grep 'gitEmail' "$CONFIG_DIR/local.nix" | sed 's/.*"\(.*\)".*/\1/')
+if [[ -f "$HOST_CONFIG" ]]; then
+    PREV_USERNAME=$(grep 'username' "$HOST_CONFIG" | sed 's/.*"\(.*\)".*/\1/')
+    PREV_HOME=$(grep 'homeDirectory' "$HOST_CONFIG" | sed 's/.*"\(.*\)".*/\1/')
+    PREV_GIT_NAME=$(grep 'gitName' "$HOST_CONFIG" | sed 's/.*"\(.*\)".*/\1/')
+    PREV_GIT_EMAIL=$(grep 'gitEmail' "$HOST_CONFIG" | sed 's/.*"\(.*\)".*/\1/')
 fi
 
 # --- Informations utilisateur ---
@@ -79,27 +80,32 @@ fi
 # --- Clone ou mise à jour ---
 if [[ -d "$CONFIG_DIR/.git" ]]; then
     info "Mise à jour du dépôt existant..."
-    git -C "$CONFIG_DIR" pull --rebase
+    git -C "$CONFIG_DIR" pull --rebase --autostash
 else
+    if [[ -e "$CONFIG_DIR" ]]; then
+        BACKUP_DIR="${CONFIG_DIR}.backup.$(date +%Y%m%d-%H%M%S)"
+        read -rp "Le dossier $CONFIG_DIR existe mais n'est pas un dépôt Git. Le sauvegarder dans $BACKUP_DIR puis continuer ? [y/N] " CONFIRM
+        [[ "$CONFIRM" =~ ^[Yy]$ ]] || error "Installation annulée."
+        mv -- "$CONFIG_DIR" "$BACKUP_DIR"
+        info "Ancienne configuration sauvegardée dans $BACKUP_DIR"
+    fi
     info "Clonage du dépôt..."
-    rm -rf "$CONFIG_DIR"
     mkdir -p "$(dirname "$CONFIG_DIR")"
     git clone "$REPO" "$CONFIG_DIR"
 fi
 
-# --- Configuration de local.nix ---
-info "Configuration de local.nix..."
-cat > "$CONFIG_DIR/local.nix" <<EOF
+# --- Configuration de l'hôte ---
+info "Configuration de $HOST_CONFIG..."
+mkdir -p "$(dirname "$HOST_CONFIG")"
+cat > "$HOST_CONFIG" <<EOF
 {
+  system = "x86_64-linux";
   username = "$USERNAME";
   homeDirectory = "$HOME_DIR";
   gitName = "$GIT_NAME";
   gitEmail = "$GIT_EMAIL";
 }
 EOF
-
-# Empêcher git de tracker les modifications locales de local.nix
-git -C "$CONFIG_DIR" update-index --skip-worktree local.nix
 
 # --- Application ---
 info "Application de la configuration Home Manager..."

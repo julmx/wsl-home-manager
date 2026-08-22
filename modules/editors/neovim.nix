@@ -90,10 +90,22 @@
         which-key-nvim
 
         # Aliases for plugins with different names
-        {name = "catppuccin"; path = catppuccin-nvim;}
-        {name = "mini.ai"; path = mini-nvim;}
-        {name = "mini.icons"; path = mini-nvim;}
-        {name = "mini.pairs"; path = mini-nvim;}
+        {
+          name = "catppuccin";
+          path = catppuccin-nvim;
+        }
+        {
+          name = "mini.ai";
+          path = mini-nvim;
+        }
+        {
+          name = "mini.icons";
+          path = mini-nvim;
+        }
+        {
+          name = "mini.pairs";
+          path = mini-nvim;
+        }
       ];
       mkEntryFromDrv = drv:
         if lib.isDerivation drv
@@ -124,6 +136,8 @@
           { import = "lazyvim.plugins.extras.lang.python" },
           -- go support
           { import = "lazyvim.plugins.extras.lang.go" },
+          -- nix support
+          { import = "lazyvim.plugins.extras.lang.nix" },
           -- put this line at the end of spec to clear ensure_installed
           { "nvim-treesitter/nvim-treesitter", opts = function(_, opts) opts.ensure_installed = {} end },
         },
