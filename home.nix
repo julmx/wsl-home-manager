@@ -59,6 +59,14 @@
     uv # python package/project manager
     sqlite # sqlite3 CLI
 
+    # Rust
+    rustc
+    cargo
+    rustfmt
+    clippy
+    rust-analyzer
+    pkg-config
+
     # Go
     go
     gopls
