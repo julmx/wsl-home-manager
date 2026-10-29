@@ -1,5 +1,6 @@
 {pkgs, ...}: let
-  settings = import ./yazi.nix;
+  yaziSettings = (import ./yazi.nix).settings;
+  settings = {inherit (yaziSettings) opener open;};
   keymap = import ./keymap.nix;
   theme = import ./theme.nix;
 in {

@@ -30,19 +30,19 @@
     opener = {
       edit = [
         {
-          run = ''${"EDITOR:-vi"} "$@"'';
+          run = ''"''${EDITOR:-vi}" %s'';
           desc = "$EDITOR";
           block = true;
           for = "unix";
         }
         {
-          run = "code %*";
+          run = "code %s";
           orphan = true;
           desc = "code";
           for = "windows";
         }
         {
-          run = "code -w %*";
+          run = "code -w %s";
           block = true;
           desc = "code (block)";
           for = "windows";
@@ -50,51 +50,51 @@
       ];
       open = [
         {
-          run = ''for file in "$@"; do wsl-open "$file"; done'';
+          run = ''for file in %s; do wsl-open "$file"; done'';
           desc = "Open with Windows";
           for = "linux";
         }
         {
-          run = ''open "$@"'';
+          run = ''open %s'';
           desc = "Open";
           for = "macos";
         }
         {
-          run = ''start "" "%1"'';
+          run = ''start "" %s1'';
           orphan = true;
           desc = "Open";
           for = "windows";
         }
         {
-          run = ''termux-open "$1"'';
+          run = ''termux-open %s1'';
           desc = "Open";
           for = "android";
         }
       ];
       reveal = [
         {
-          run = ''xdg-open "$(dirname "$1")"'';
+          run = ''xdg-open %d1'';
           desc = "Reveal";
           for = "linux";
         }
         {
-          run = ''open -R "$1"'';
+          run = ''open -R %s1'';
           desc = "Reveal";
           for = "macos";
         }
         {
-          run = ''explorer /select,"%1"'';
+          run = ''explorer /select,%s1'';
           orphan = true;
           desc = "Reveal";
           for = "windows";
         }
         {
-          run = ''termux-open "$(dirname "$1")"'';
+          run = ''termux-open %d1'';
           desc = "Reveal";
           for = "android";
         }
         {
-          run = ''exiftool "$1"; echo "Press enter to exit"; read _'';
+          run = ''exiftool %s1; echo "Press enter to exit"; read _'';
           block = true;
           desc = "Show EXIF";
           for = "unix";
@@ -102,29 +102,29 @@
       ];
       extract = [
         {
-          run = ''ya pub extract --list "$@"'';
+          run = ''ya pub extract --list %s'';
           desc = "Extract here";
           for = "unix";
         }
         {
-          run = "ya pub extract --list %*";
+          run = "ya pub extract --list %s";
           desc = "Extract here";
           for = "windows";
         }
       ];
       play = [
         {
-          run = ''mpv --force-window "$@"'';
+          run = ''mpv --force-window %s'';
           orphan = true;
           for = "unix";
         }
         {
-          run = "mpv --force-window %*";
+          run = "mpv --force-window %s";
           orphan = true;
           for = "windows";
         }
         {
-          run = ''mediainfo "$1"; echo "Press enter to exit"; read _'';
+          run = ''mediainfo %s1; echo "Press enter to exit"; read _'';
           block = true;
           desc = "Show media info";
           for = "unix";
@@ -134,7 +134,7 @@
     open = {
       rules = [
         {
-          name = "*/";
+          url = "*/";
           use = ["edit" "open" "reveal"];
         }
         {
@@ -166,7 +166,7 @@
           use = ["edit" "reveal"];
         }
         {
-          name = "*";
+          url = "*";
           use = ["open" "reveal"];
         }
       ];
