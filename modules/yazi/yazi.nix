@@ -50,8 +50,8 @@
       ];
       open = [
         {
-          run = ''xdg-open "$1"'';
-          desc = "Open";
+          run = ''for file in "$@"; do wsl-open "$file"; done'';
+          desc = "Open with Windows";
           for = "linux";
         }
         {
@@ -147,14 +147,14 @@
         }
         {
           mime = "{audio,video}/*";
-          use = ["play" "reveal"];
+          use = ["open" "play" "reveal"];
         }
         {
           mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}";
           use = ["extract" "reveal"];
         }
         {
-          mime = "application/{json,ndjson}";
+          mime = "application/{json,ndjson,xml,yaml,x-yaml,toml,sql,x-shellscript}";
           use = ["edit" "reveal"];
         }
         {
