@@ -39,6 +39,9 @@
   home.stateVersion = "25.05";
 
   home.packages = with pkgs; [
+    # WSL integration — open files and URLs with Windows applications
+    wslu
+
     # Search and file tools
     ripgrep
     fd
