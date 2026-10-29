@@ -50,7 +50,7 @@
       ];
       open = [
         {
-          run = ''for file in %s; do wsl-open "$file"; done'';
+          run = ''for file in %s; do WslOpenExe="powershell.exe -NoProfile Start" wsl-open "$file"; done'';
           desc = "Open with Windows";
           for = "linux";
         }
