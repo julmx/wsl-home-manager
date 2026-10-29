@@ -40,7 +40,7 @@
 
   home.packages = with pkgs; [
     # WSL integration — open files and URLs with Windows applications
-    wslu
+    wsl-open
 
     # Search and file tools
     ripgrep
