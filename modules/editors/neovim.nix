@@ -88,6 +88,7 @@
         trouble-nvim
         ts-comments-nvim
         which-key-nvim
+        yazi-nvim
 
         # Aliases for plugins with different names
         {
@@ -129,6 +130,16 @@
           { "LazyVim/LazyVim", import = "lazyvim.plugins" },
           -- force enable telescope-fzf-native.nvim
           { "nvim-telescope/telescope-fzf-native.nvim", enabled = true },
+          {
+            "mikavilpas/yazi.nvim",
+            dependencies = { "nvim-lua/plenary.nvim" },
+            cmd = "Yazi",
+            keys = {
+              { "<leader>-", "<cmd>Yazi<cr>", mode = { "n", "v" }, desc = "Yazi (current file)" },
+              { "<leader>fY", "<cmd>Yazi cwd<cr>", desc = "Yazi (cwd)" },
+            },
+            opts = {},
+          },
           -- disable mason (use Nix extraPackages instead)
           { "mason-org/mason-lspconfig.nvim", enabled = false },
           { "mason-org/mason.nvim", enabled = false },
