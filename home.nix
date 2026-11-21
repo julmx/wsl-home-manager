@@ -58,6 +58,8 @@
     inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.proton-pass-cli
 
     # Development
+    # Gitea CLI : recette de la PR Nixpkgs #586962 (87ac0e7e), à retirer quand gitea-cli sera empaqueté.
+    (inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.callPackage ./packages/gitea-cli.nix {})
     nodejs
     pnpm
     pyright
