@@ -1,6 +1,7 @@
 {
   pkgs,
   host,
+  inputs,
   ...
 }: {
   nixpkgs.config.allowUnfree = true;
@@ -54,7 +55,7 @@
     jq
     yq-go # YAML processor (mikefarah)
     just
-    proton-pass-cli
+    inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.proton-pass-cli
 
     # Development
     nodejs
