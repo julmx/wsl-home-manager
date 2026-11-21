@@ -54,6 +54,7 @@
     jq
     yq-go # YAML processor (mikefarah)
     just
+    proton-pass-cli
 
     # Development
     nodejs
