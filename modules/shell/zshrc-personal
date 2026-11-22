@@ -1,9 +1,6 @@
 # Personal environment variables (not managed by home-manager)
 # Sourced by zsh.nix initContent
 
-# OpenCode API keys
-export PATH="$HOME/.opencode/bin:$PATH"
-
 # Session Proton Pass et agent SSH du coffre CLI.
 proton-cli-login() {
   local proton_pat

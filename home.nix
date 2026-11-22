@@ -99,6 +99,7 @@
   ];
 
   home.sessionPath = [
+    "$HOME/.opencode/bin"
     "$HOME/.local/bin"
     "$HOME/go/bin"
     "$HOME/.local/share/pnpm"
