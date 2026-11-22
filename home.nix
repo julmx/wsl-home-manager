@@ -11,6 +11,7 @@
 
     # CLI tools
     ./modules/cli/bat.nix
+    ./modules/cli/codex.nix
     ./modules/cli/fzf.nix
     ./modules/cli/git.nix
     ./modules/cli/lazygit.nix
