@@ -3,6 +3,8 @@
   lib,
   ...
 }: {
+  home.file.".zshrc-personal".source = ./zshrc-personal;
+
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;

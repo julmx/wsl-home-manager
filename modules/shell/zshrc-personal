@@ -1,0 +1,88 @@
+# Personal environment variables (not managed by home-manager)
+# Sourced by zsh.nix initContent
+
+# OpenCode API keys
+export PATH="$HOME/.opencode/bin:$PATH"
+
+# Session Proton Pass et agent SSH du coffre CLI.
+proton-cli-login() {
+  local proton_pat
+
+  read -rs 'proton_pat?Jeton Proton Pass du coffre CLI : ' || return 1
+  printf '\n' >&2
+  if [[ -z "$proton_pat" ]]; then
+    printf 'Le jeton Proton Pass est vide.\n' >&2
+    return 1
+  fi
+
+  PROTON_PASS_PERSONAL_ACCESS_TOKEN="$proton_pat" pass-cli login
+}
+
+proton-ssh-start() {
+  if [[ ! -v XDG_RUNTIME_DIR || -z "$XDG_RUNTIME_DIR" ]]; then
+    printf 'XDG_RUNTIME_DIR doit être défini dans la session WSL.\n' >&2
+    return 1
+  fi
+
+  local socket_path="$XDG_RUNTIME_DIR/proton-pass-gitea.sock"
+  local agent_status=0
+
+  # ssh-add renvoie 2 si l’agent est inaccessible, 1 s’il répond sans clé.
+  SSH_AUTH_SOCK="$socket_path" ssh-add -l >/dev/null 2>&1 || agent_status=$?
+  if (( agent_status == 2 )); then
+    pass-cli ssh-agent daemon start --vault-name CLI \
+      --socket-path "$socket_path" \
+      --pid-file "$XDG_RUNTIME_DIR/proton-pass-gitea.pid" || return $?
+  fi
+
+  export SSH_AUTH_SOCK="$socket_path"
+  ssh-add -l
+}
+
+# Charge les clés CODIX et GENX à la demande pour OpenCode.
+opencode() {
+  local start_shared=0
+  case "${1-}" in
+    -h|--help|-v|--version|--completions|--server|--server=*)
+      command opencode "$@"
+      return
+      ;;
+    service)
+      case "${2-}" in
+        start|restart) ;;
+        *) command opencode "$@"; return ;;
+      esac
+      ;;
+    --standalone|serve) ;;
+    *)
+      local service_status
+      service_status=$(command opencode service status) || return
+      if [[ "$service_status" != stopped ]]; then
+        command opencode "$@"
+        return
+      fi
+      start_shared=1
+      ;;
+  esac
+
+  setopt localoptions noxtrace
+  local codix_key genx_key
+  codix_key=$(pass-cli item view 'pass://CLI/CODIX/api_key') || return
+  if [[ -z "$codix_key" ]]; then
+    printf 'La clé CODIX dans Proton Pass est vide.\n' >&2
+    return 1
+  fi
+
+  genx_key=$(pass-cli item view 'pass://CLI/GENX/api_key') || return
+  if [[ -z "$genx_key" ]]; then
+    printf 'La clé GENX dans Proton Pass est vide.\n' >&2
+    return 1
+  fi
+
+  if (( start_shared )); then
+    CODIX_API_KEY="$codix_key" GENX_API_KEY="$genx_key" command opencode service start >/dev/null || return
+    command opencode "$@"
+  else
+    CODIX_API_KEY="$codix_key" GENX_API_KEY="$genx_key" command opencode "$@"
+  fi
+}
