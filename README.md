@@ -10,7 +10,7 @@ Configuration Home Manager (Nix) pour environnement WSL, gérée via un flake.
 - **Multiplexeur d'agents** : herdr (« tmux » orienté agents IA, via nixpkgs-unstable)
 - **CLI tools** : bat, fzf, git, lazygit, btop, gh
 - **Utilitaires** : eza, zoxide, tealdeer, fastfetch, ripgrep, fd, jq, ncdu, duf, yazi, unzip, unrar, wget
-- **Dev** : Node.js (version par défaut de Nixpkgs), pnpm, pyright, sqlite, Go (gopls, delve, golangci-lint, gofumpt, goimports, gomodifytags, gotests, impl)
+- **Dev** : Antigravity CLI (`agy`), Node.js (version par défaut de Nixpkgs), pnpm, pyright, sqlite, Go (gopls, delve, golangci-lint, gofumpt, goimports, gomodifytags, gotests, impl)
 - **Fun** : onefetch, cowsay, lolcat, mdcat
 - **Fonts** : JetBrains Mono NF, Fira Code NF, Maple Mono NF
 

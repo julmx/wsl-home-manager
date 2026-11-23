@@ -59,6 +59,11 @@
     inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.proton-pass-cli
 
     # Development
+    # Antigravity CLI (agy), depuis nixos-unstable.
+    ((import inputs.nixpkgs-unstable {
+      system = pkgs.stdenv.hostPlatform.system;
+      config.allowUnfreePredicate = pkg: pkgs.lib.getName pkg == "antigravity-cli";
+    }).antigravity-cli)
     # Gitea CLI : recette de la PR Nixpkgs #586962 (87ac0e7e), à retirer quand gitea-cli sera empaqueté.
     (inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.callPackage ./packages/gitea-cli.nix {})
     nodejs
