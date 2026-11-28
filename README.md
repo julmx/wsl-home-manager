@@ -71,10 +71,11 @@ Les tâches courantes sont disponibles via [`just`](https://github.com/casey/jus
 
 | Commande | Description |
 |---|---|
-| `just switch` | Appliquer la configuration |
+| `just switch` | Appliquer la configuration et afficher les paquets modifiés |
 | `just switch-debug` | Appliquer avec trace complète (debug) |
 | `just update` | Mettre à jour les inputs du flake (nixpkgs, home-manager, nixvim, nixpkgs-unstable) |
-| `just upgrade` | Mettre à jour + appliquer |
+| `just upgrade` | Mettre à jour + appliquer (avec diff des paquets) |
+| `just diff` | Afficher les paquets modifiés entre les deux dernières générations |
 | `just generations` | Lister les générations (historique) |
 | `just packages` | Lister les paquets installés |
 | `just check` | Vérifier la config sans l'appliquer |

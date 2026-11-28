@@ -3,9 +3,27 @@
 # Chemin du flake
 flake := env("HOME") / ".config/home-manager"
 
-# Appliquer la configuration
+# Appliquer la configuration (et afficher les paquets modifiés)
 switch:
-    home-manager switch --flake {{ flake }}
+    #!/usr/bin/env bash
+    set -euo pipefail
+    profile="${XDG_STATE_HOME:-$HOME/.local/state}/nix/profiles/home-manager"
+    old=$(readlink -f "$profile" 2>/dev/null || true)
+    home-manager switch --flake "{{ flake }}"
+    new=$(readlink -f "$profile" 2>/dev/null || true)
+    if [[ -n "$old" && -n "$new" ]]; then
+        echo ""
+        if [[ "$old" == "$new" ]]; then
+            echo "Aucun changement."
+        else
+            echo "=== Paquets modifiés ==="
+            if [[ -n "$(nix store diff-closures "$old" "$new")" ]]; then
+                nix store diff-closures "$old" "$new"
+            else
+                echo "Aucun changement de paquet (config uniquement)."
+            fi
+        fi
+    fi
 
 # Appliquer avec trace complète (debug)
 switch-debug:
@@ -17,6 +35,25 @@ update:
 
 # Mettre à jour et appliquer
 upgrade: update switch
+
+# Afficher les paquets modifiés entre les deux dernières générations
+diff:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mapfile -t gens < <(home-manager generations | sed -n 's/.*-> \(\/nix\/store\/[^ ]*\).*/\1/p')
+    if (( ${#gens[@]} < 2 )); then
+        echo "Pas assez de générations pour comparer."
+        exit 0
+    fi
+    new="${gens[0]}"
+    old="${gens[1]}"
+    if [[ "$old" == "$new" ]]; then
+        echo "Aucun changement entre les deux dernières générations."
+    elif [[ -n "$(nix store diff-closures "$old" "$new")" ]]; then
+        nix store diff-closures "$old" "$new"
+    else
+        echo "Aucun changement de paquet (config uniquement)."
+    fi
 
 # Lister les générations
 generations:
